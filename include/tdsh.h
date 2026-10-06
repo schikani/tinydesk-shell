@@ -18,19 +18,34 @@ extern "C" {
 #define TDSH_MAX_ARGS      48
 #define TDSH_MAX_PATH      256
 #define TDSH_MAX_REAL_PATH (TDSH_MAX_PATH * 2 + 96)
-#define TDSH_MAX_VARS      64
-#define TDSH_VAR_NAME_MAX  32
+/* The variable table costs TDSH_MAX_VARS * (1 + TDSH_VAR_NAME_MAX +
+ * TDSH_VAR_VALUE_MAX) bytes in every session, including each script's copy.
+ * Buffer sizes include the terminating NUL.  An override must apply to every
+ * component using tdsh.h (core, ports and consumers such as TinyDesk), since
+ * these limits change tdsh_session_t's layout. */
+#ifndef TDSH_MAX_VARS
+#define TDSH_MAX_VARS 64
+#endif
+#ifndef TDSH_VAR_NAME_MAX
+#define TDSH_VAR_NAME_MAX 32
+#endif
+#ifndef TDSH_VAR_VALUE_MAX
 #define TDSH_VAR_VALUE_MAX 256
-#define TDSH_USERNAME_MAX  32
+#endif
+#define TDSH_USERNAME_MAX 32
 
 /* Script files use the .tdsh extension. Each user's startup script, run
  * when the physical console starts as that user: */
-#define TDSH_SCRIPT_EXT           ".tdsh"
-#define TDSH_STARTUP_FILE         ".tdshrc.tdsh"
-#define TDSH_HOSTNAME_MAX         32
-#define TDSH_MAX_COMMANDS         128
-#define TDSH_COPY_BUFFER_SIZE     4096
-#define TDSH_SCRIPT_TASK_STACK    32768
+#define TDSH_SCRIPT_EXT       ".tdsh"
+#define TDSH_STARTUP_FILE     ".tdshrc.tdsh"
+#define TDSH_HOSTNAME_MAX     32
+#define TDSH_MAX_COMMANDS     128
+#define TDSH_COPY_BUFFER_SIZE 4096
+/* Bytes requested for each script worker's stack, in addition to its
+ * session copy and runtime allocations.  Ports may impose their own cap. */
+#ifndef TDSH_SCRIPT_TASK_STACK
+#define TDSH_SCRIPT_TASK_STACK 32768
+#endif
 #define TDSH_SCRIPT_TASK_PRIORITY 4
 
 /* Compatibility defaults used by the ESP-IDF reference port. The portable

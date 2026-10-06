@@ -144,6 +144,32 @@ On Windows add `-DCMAKE_C_COMPILER=gcc` (MinGW-w64); the program is
 `build-host/tdsh_host.exe`. `docs/POSIX_HOST.md` and `docs/WINDOWS_HOST.md`
 explain the host ports.
 
+### Memory limits for ports
+
+`TDSH_MAX_VARS`, `TDSH_VAR_NAME_MAX`, `TDSH_VAR_VALUE_MAX` and
+`TDSH_SCRIPT_TASK_STACK` in `tdsh.h` can be set by the build. Their defaults
+are 64 variables, 32-byte name buffers, 256-byte value buffers and 32768
+bytes of stack requested per script worker. The buffers include the final
+NUL. Each script keeps its own copy of the session and its variables.
+
+Apply the same overrides to **every component that includes `tdsh.h`**,
+including the shell core, the platform port and consumers such as TinyDesk.
+The variable limits change the layout of `tdsh_session_t`; mixing defaults
+and overrides between components is incompatible. Set the definitions
+from the build system rather than editing the header. For example, a host
+build with smaller variable tables can use:
+
+```bash
+cmake -S . -B build-small -DTDSH_BUILD_HOST=ON \
+  -DCMAKE_C_FLAGS="-DTDSH_MAX_VARS=48 -DTDSH_VAR_VALUE_MAX=128"
+cmake --build build-small
+ctest --test-dir build-small --output-on-failure
+```
+
+For consumers with C++ sources, pass the same definitions to their C++
+compilation too. Choose the worker stack size for the target and verify
+its margin while running the intended scripts.
+
 ## Scripts
 
 Put commands in a `.tdsh` file and run it with `tdsh run`. The script
