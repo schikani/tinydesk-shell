@@ -194,7 +194,7 @@ own prefix for its names, commands and board keys
 
 | Port | Platform | Prefix | Notes |
 | --- | --- | --- | --- |
-| [TinyTang](https://github.com/aquasock/TinyTang) by [@aquasock](https://github.com/aquasock) | BL616 (FreeRTOS), Sipeed Tang Console 138K | not chosen yet | Shell over USB CDC with the SD card as filesystem; adds commands to load FPGA cores and ROMs, mirror the session to the core's on-screen display, and self-update the firmware |
+| [TinyTang](https://github.com/aquasock/TinyTang) by [@aquasock](https://github.com/aquasock) | BL616 (FreeRTOS), Sipeed Tang Console 138K | `tang` | TinyDesk on the board's own BL616: the desktop is drawn over HDMI by the FPGA core and mirrored over USB CDC, with the SD card as filesystem and a Bluetooth LE keyboard and mouse; adds commands to load FPGA cores and ROMs, play music through the Tang-Phosphor core, and self-update the firmware |
 
 ## Documentation
 
