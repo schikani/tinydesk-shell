@@ -19,6 +19,10 @@
 #include <time.h>
 #include <unistd.h>
 
+#ifndef PTHREAD_STACK_MIN
+#define PTHREAD_STACK_MIN 8192  /* fallback for macOS */
+#endif
+
 static tdsh_posix_config_t s_cfg;
 static tdsh_session_t s_session;
 static char s_hostname[TDSH_HOSTNAME_MAX];
